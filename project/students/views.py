@@ -2,11 +2,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.db.models import IntegerField
+from django.db.models.functions import Cast
 from .models import Student
 
 
 def login_view(request):
-
     if request.user.is_authenticated:
         return redirect('home')
 
@@ -30,9 +31,13 @@ def home(request):
     query = request.GET.get('q')
 
     if query:
-        students = Student.objects.filter(roll=query)
+        students = Student.objects.filter(roll=query).annotate(
+            roll_int=Cast('roll', IntegerField())
+        ).order_by('roll_int')
     else:
-        students = Student.objects.all()
+        students = Student.objects.all().annotate(
+            roll_int=Cast('roll', IntegerField())
+        ).order_by('roll_int')
 
     total = students.count()
 
@@ -53,7 +58,6 @@ def home(request):
 
 
 def _validate_marks(post_data):
-
     subjects = ['tamil', 'english', 'maths', 'science', 'social']
     for subject in subjects:
         val = post_data.get(subject, '').strip()
@@ -66,7 +70,6 @@ def _validate_marks(post_data):
 
 @login_required
 def add_student(request):
-
     if request.method == 'POST':
         roll = request.POST.get('roll', '').strip()
         name = request.POST.get('name', '').strip()
@@ -101,7 +104,6 @@ def add_student(request):
 
 @login_required
 def update_student(request, id):
-    
     student = get_object_or_404(Student, id=id)
 
     if request.method == 'POST':
