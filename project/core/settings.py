@@ -3,10 +3,8 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Fix 1: SECRET_KEY from environment variable
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-dev-key-change-in-production')
 
-# Fix 1: DEBUG from environment variable
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = ['*'] if DEBUG else ['yourdomain.com']
@@ -28,7 +26,6 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    # Fix 2: XFrame clickjacking protection
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -59,6 +56,4 @@ STATIC_URL = '/static/'
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login/'
-
-# Fix 11: Suppress Django system check warning
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

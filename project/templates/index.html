@@ -77,7 +77,6 @@ table th { font-weight: 500; }
   </div>
 </div>
 
-<!-- CHART: Fix 1 - Hide when no students -->
 {% if students %}
 <div class="card shadow p-4 mb-4 mx-auto" style="max-width: 400px;">
   <h5 class="text-center mb-3">📊 Pass vs Fail</h5>
@@ -117,7 +116,7 @@ table th { font-weight: 500; }
     <a href="{% url 'update_student' s.id %}" class="btn btn-warning btn-sm">
       <i class="fas fa-edit"></i>
     </a>
-    <!-- Fix 5: Added closing </form> tag -->
+
     <form method="POST" action="{% url 'delete_student' s.id %}" style="display:inline;">
       {% csrf_token %}
       <button type="submit" class="btn btn-danger btn-sm"
@@ -128,7 +127,7 @@ table th { font-weight: 500; }
   </td>
 </tr>
 {% empty %}
-<!-- Fix 10: No results message -->
+
 <tr><td colspan="7" class="text-center text-muted py-3">No students found.</td></tr>
 {% endfor %}
 
@@ -136,7 +135,6 @@ table th { font-weight: 500; }
 
 </div>
 
-<!-- CHART SCRIPT: Fix 1 - Only render when students exist -->
 {% if students %}
 <script>
 const ctx = document.getElementById('myChart');

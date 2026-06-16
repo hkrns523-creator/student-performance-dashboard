@@ -6,7 +6,7 @@ from .models import Student
 
 
 def login_view(request):
-    # Fix 8: Redirect already-logged-in users away from login page
+
     if request.user.is_authenticated:
         return redirect('home')
 
@@ -36,7 +36,6 @@ def home(request):
 
     total = students.count()
 
-    # Fix 7: Use property (no parentheses) for status
     passed = sum(1 for s in students if s.status == "PASS")
     failed = sum(1 for s in students if s.status == "FAIL")
 
@@ -54,7 +53,7 @@ def home(request):
 
 
 def _validate_marks(post_data):
-    """Returns error string or None if valid. Fix 3 & 4: mark range validation."""
+
     subjects = ['tamil', 'english', 'maths', 'science', 'social']
     for subject in subjects:
         val = post_data.get(subject, '').strip()
@@ -67,6 +66,7 @@ def _validate_marks(post_data):
 
 @login_required
 def add_student(request):
+
     if request.method == 'POST':
         roll = request.POST.get('roll', '').strip()
         name = request.POST.get('name', '').strip()
@@ -79,7 +79,6 @@ def add_student(request):
             messages.error(request, "Roll number already exists!")
             return render(request, 'add.html')
 
-        # Fix 3: Validate mark ranges server-side
         error = _validate_marks(request.POST)
         if error:
             messages.error(request, error)
@@ -102,6 +101,7 @@ def add_student(request):
 
 @login_required
 def update_student(request, id):
+    
     student = get_object_or_404(Student, id=id)
 
     if request.method == 'POST':
@@ -117,7 +117,6 @@ def update_student(request, id):
                 messages.error(request, "All fields are required.")
                 return render(request, 'update.html', {'s': student})
 
-            # Fix 4: Validate mark ranges server-side
             error = _validate_marks(request.POST)
             if error:
                 messages.error(request, error)

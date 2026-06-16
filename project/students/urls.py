@@ -1,7 +1,6 @@
 from django.urls import path
 from . import views
 
-# Fix 9: Named URLs
 urlpatterns = [
     path('', views.home, name='home'),
     path('add/', views.add_student, name='add_student'),
